@@ -1,30 +1,23 @@
 import logging
-from logging.handlers import RotatingFileHandler
 
-def setup_logger(log_file='app.log', max_bytes=10 * 1024 * 1024, backup_count=5):
-    """
-    Set up a logger that saves logs to a file with rotation.
-    
-    Parameters:
-    log_file (str): Name of the log file.
-    max_bytes (int): Max size of log file before rotation.
-    backup_count (int): Number of backup files to keep.
-    """
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    
-    # Create a formatter that adds timestamps and log levels to messages
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    
-    # Create a rotating file handler
-    handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
-    handler.setFormatter(formatter)
-    
-    # Add the handler to the logger
-    logger.addHandler(handler)
-    return logger
+# Configure logging settings
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Example usage of the logger
+def log_info(message):
+    logging.info(message)
+
+def log_error(message):
+    logging.error(message)
+
+def log_warning(message):
+    logging.warning(message)
+
+# Example of usage in input processing loop
 if __name__ == '__main__':
-    log = setup_logger()
-    log.info('Logger has been set up.')
+    user_input = 'example'
+    if isinstance(user_input, str) and user_input:
+        log_info(f'Received valid input: {user_input}')
+    else:
+        log_error('Invalid input received')
+        log_warning('Input should be a non-empty string')
