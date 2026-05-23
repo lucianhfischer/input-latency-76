@@ -1,29 +1,26 @@
 import time
 import random
 
-MAX_RETRIES = 5
-RETRY_DELAY = 2  # seconds
+class GameLatencySimulator:
+    def __init__(self):
+        self.latency = 0
 
-class NetworkError(Exception):
-    pass
+    def set_latency(self, min_latency: float, max_latency: float):
+        """Set random latency within a given range."""
+        self.latency = random.uniform(min_latency, max_latency)
 
-def simulated_network_operation():
-    if random.random() < 0.7:  # Simulating a failure 70% of the time
-        raise NetworkError("Network operation failed")
-    return "Success"
+    def simulate_action(self):
+        """Simulates an action with latency."""
+        time.sleep(self.latency)
 
-def perform_network_operation_with_retries():
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            result = simulated_network_operation()
-            print(result)
-            return result
-        except NetworkError as e:
-            print(f'Attempt {attempt} failed: {e}')
-            time.sleep(RETRY_DELAY)
-            if attempt == MAX_RETRIES:
-                print('All attempts failed.')
-                raise
+    def get_current_latency(self):
+        """Returns the current latency."""
+        return self.latency
 
+# Example usage:
 if __name__ == '__main__':
-    perform_network_operation_with_retries()
+    simulator = GameLatencySimulator()
+    simulator.set_latency(0.1, 0.5)
+    print(f'Simulated latency: {simulator.get_current_latency()} seconds')
+    simulator.simulate_action()
+    print('Action simulated with latency')
