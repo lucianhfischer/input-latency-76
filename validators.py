@@ -1,29 +1,25 @@
-def validate_input(user_input):
-    """
-    Validates user input for correctness
-    and prevents injection attacks.
-    """
-    if not isinstance(user_input, str):
-        raise ValueError("Input must be a string.")
-    if len(user_input) == 0:
-        raise ValueError("Input cannot be empty.")
-    if user_input.strip() == '':
-        raise ValueError("Input cannot be just whitespace.")
-    restricted_chars = [';', '--', '/*', '*/']
-    for char in restricted_chars:
-        if char in user_input:
-            raise ValueError(f"Input contains invalid characters: {char}")
+def validate_input(input_value):
+    if not isinstance(input_value, (int, float)):
+        raise ValueError("Input must be a number.")
+    if input_value < 0:
+        raise ValueError("Input must be non-negative.")
     return True
 
-def main_loop():
-    while True:
-        user_input = input("Enter your command:")
-        try:
-            validate_input(user_input)
-            # Process the validated input here
-            print(f"Processing: {user_input}")
-        except ValueError as e:
-            print(f"Input error: {e}")
+def validate_key_press(key):
+    valid_keys = {'W', 'A', 'S', 'D', 'SPACE', 'ESC'}
+    if key not in valid_keys:
+        raise ValueError(f"Invalid key press: {key}")
+    return True
 
+# Main processing loop (example usage)
 if __name__ == '__main__':
-    main_loop()
+    inputs = [0, 1, -3, 5, 'A', 'Z']  # Example inputs
+    for inp in inputs:
+        try:
+            if isinstance(inp, str):  # Check if input is key press
+                validate_key_press(inp)
+            else:
+                validate_input(inp)
+            print(f"Input {inp} is valid.")
+        except ValueError as e:
+            print(f"Error: {e}")
