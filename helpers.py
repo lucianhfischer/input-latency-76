@@ -1,27 +1,35 @@
 import time
-import requests
-from requests.exceptions import RequestException
+import logging
 
-def retry_request(url, max_retries=5, delay=2):
-    """Retry a network request up to max_retries times."""
-    attempts = 0
-    while attempts < max_retries:
-        try:
-            response = requests.get(url)
-            response.raise_for_status()  # Raise an error for 4xx/5xx responses
-            return response.json()  # Returning JSON if request is successful
-        except RequestException as e:
-            attempts += 1
-            print(f'Attempt {attempts} failed: {e}')
-            if attempts < max_retries:
-                time.sleep(delay)  # Wait before retrying
-            else:
-                raise  # Reraise the last exception if no attempts left
+# Setup logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Example usage:
+class InputLatencyError(Exception):
+    pass
+
+def validate_input_time(input_time):
+    if not isinstance(input_time, (int, float)):
+        logging.error('Invalid input type: %s', type(input_time))
+        raise InputLatencyError('Input time must be an integer or float')
+    if input_time < 0:
+        logging.error('Negative input time: %s', input_time)
+        raise InputLatencyError('Input time cannot be negative')
+    logging.debug('Input time validated: %s', input_time)
+    return input_time
+
+def simulate_input_latency(input_time):
+    validate_input_time(input_time)
+    try:
+        logging.info('Starting latency simulation for: %s seconds', input_time)
+        time.sleep(input_time)
+        logging.info('Latency simulation completed')
+    except Exception as e:
+        logging.error('Error during latency simulation: %s', str(e))
+        raise InputLatencyError('Simulation failed due to an unexpected error')
+
+# Example usage
 if __name__ == '__main__':
     try:
-        data = retry_request('https://api.example.com/data')
-        print('Data fetched:', data)
-    except Exception as error:
-        print('Final error after retries:', error)
+        simulate_input_latency(0.5)
+    except InputLatencyError as e:
+        logging.error('InputLatencyError: %s', e)
