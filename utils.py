@@ -1,7 +1,7 @@
 import json
 
 class GameDataError(Exception):
-    """Custom exception for game data errors."""
+    """Custom exception for game data handling errors."""
     pass
 
 
@@ -10,11 +10,11 @@ def load_game_data(file_path):
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
-        return data
+            return data
     except FileNotFoundError:
-        raise GameDataError(f"File '{file_path}' not found.")
+        raise GameDataError(f"File not found: {file_path}")
     except json.JSONDecodeError:
-        raise GameDataError(f"File '{file_path}' contains invalid JSON.")
+        raise GameDataError(f"Invalid JSON in file: {file_path}")
 
 
 def save_game_data(file_path, data):
@@ -22,15 +22,14 @@ def save_game_data(file_path, data):
     try:
         with open(file_path, 'w') as file:
             json.dump(data, file, indent=4)
-    except IOError as e:
-        raise GameDataError(f"An error occurred while saving data: {e}")
+    except IOError:
+        raise GameDataError(f"Error writing to file: {file_path}")
 
 
-def update_game_data(file_path, new_data):
-    """Update existing game data with new data."""
-    try:
-        existing_data = load_game_data(file_path)
-        existing_data.update(new_data)
-        save_game_data(file_path, existing_data)
-    except GameDataError as e:
-        raise GameDataError(f"Failed to update game data: {e}")
+def validate_game_data(data):
+    """Basic validation for game data structure."""
+    required_keys = ['player_id', 'score', 'level']
+    for key in required_keys:
+        if key not in data:
+            raise GameDataError(f"Missing required key: {key}")
+    return True
