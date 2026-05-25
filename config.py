@@ -1,24 +1,34 @@
 import json
 import os
 
-DEFAULT_CONFIG = {
-    'resolution': '1920x1080',
-    'fullscreen': True,
-    'volume': 50,
-    'controls': {
-        'move_forward': 'W',
-        'move_backward': 'S',
-        'turn_left': 'A',
-        'turn_right': 'D',
-    }
-}
+class ConfigLoader:
+    def __init__(self, default_config_path='default_config.json', user_config_path='user_config.json'):
+        self.default_config_path = default_config_path
+        self.user_config_path = user_config_path
+        self.config = self.load_config()
 
-def load_config(config_file='config.json'):
-    """Load configuration from a JSON file, using defaults if not present."""
-    if not os.path.exists(config_file):
-        return DEFAULT_CONFIG  # Return defaults if file does not exist
-    with open(config_file, 'r') as file:
-        user_config = json.load(file)  # Load user-defined config
-    # Merging user config with defaults
-    config = {**DEFAULT_CONFIG, **user_config}
-    return config
+    def load_config(self):
+        config = self.load_default_config()
+        user_config = self.load_user_config()
+        config.update(user_config)
+        return config
+
+    def load_default_config(self):
+        if not os.path.exists(self.default_config_path):
+            raise FileNotFoundError(f'Default config not found at {self.default_config_path}')
+        with open(self.default_config_path, 'r') as file:
+            return json.load(file)
+
+    def load_user_config(self):
+        if os.path.exists(self.user_config_path):
+            with open(self.user_config_path, 'r') as file:
+                return json.load(file)
+        return {}
+
+    def get(self, key, default=None):
+        return self.config.get(key, default)
+
+# Example usage:
+# if __name__ == '__main__':
+#     config_loader = ConfigLoader()
+#     print(config_loader.get('resolution', '1920x1080'))
