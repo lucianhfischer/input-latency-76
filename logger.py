@@ -1,23 +1,32 @@
 import logging
+from logging.handlers import RotatingFileHandler
 
-# Configure logging settings
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+class Logger:
+    def __init__(self, name, log_file='app.log', max_bytes=1024*1024, backup_count=5):
+        self.logger = logging.getLogger(name)
+        self.logger.setLevel(logging.DEBUG)
+        handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
 
-def log_info(message):
-    logging.info(message)
+    def debug(self, message):
+        self.logger.debug(message)
 
-def log_error(message):
-    logging.error(message)
+    def info(self, message):
+        self.logger.info(message)
 
-def log_warning(message):
-    logging.warning(message)
+    def warning(self, message):
+        self.logger.warning(message)
 
-# Example of usage in input processing loop
+    def error(self, message):
+        self.logger.error(message)
+
+    def critical(self, message):
+        self.logger.critical(message)
+
+# Example usage:
 if __name__ == '__main__':
-    user_input = 'example'
-    if isinstance(user_input, str) and user_input:
-        log_info(f'Received valid input: {user_input}')
-    else:
-        log_error('Invalid input received')
-        log_warning('Input should be a non-empty string')
+    log = Logger('game_logger')
+    log.info('This is an info message')
+    log.error('This is an error message')
