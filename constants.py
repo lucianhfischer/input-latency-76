@@ -1,31 +1,46 @@
-from typing import Final
+GAME_SESSION_TIMEOUT = 300  # in seconds
 
-# Game settings constants
-FPS: Final[int] = 60  # Frames per second
-SCREEN_WIDTH: Final[int] = 1920  # Screen width in pixels
-SCREEN_HEIGHT: Final[int] = 1080  # Screen height in pixels
-PLAYER_SPEED: Final[float] = 5.0  # Player speed in units per second
-GRAVITY: Final[float] = 9.81  # Gravity constant in m/s^2
+LEVELS = {
+    1: 'Starting Point',
+    2: 'The Plains',
+    3: 'The Volcano',
+    4: 'The Fortress',
+    5: 'The Final Dungeon',
+}
 
-# Color constants
-BLACK: Final[tuple[int, int, int]] = (0, 0, 0)
-WHITE: Final[tuple[int, int, int]] = (255, 255, 255)
-RED: Final[tuple[int, int, int]] = (255, 0, 0)
-GREEN: Final[tuple[int, int, int]] = (0, 255, 0)
-BLUE: Final[tuple[int, int, int]] = (0, 0, 255)
+ITEMS = {
+    'sword': {'damage': 10, 'type': 'weapon'},
+    'shield': {'defense': 5, 'type': 'armor'},
+    'health_potion': {'heal': 20, 'type': 'consumable'},
+}
 
-# Game state constants
-STATE_MENU: Final[str] = 'menu'
-STATE_PLAYING: Final[str] = 'playing'
-STATE_PAUSED: Final[str] = 'paused'
-STATE_GAME_OVER: Final[str] = 'game_over'
+PLAYER_STATES = [
+    'idle',
+    'running',
+    'attacking',
+    'defending',
+    'dead',
+]
 
-# Control key bindings
-KEY_UP: Final[str] = 'w'
-KEY_DOWN: Final[str] = 's'
-KEY_LEFT: Final[str] = 'a'
-KEY_RIGHT: Final[str] = 'd'
+ENEMY_TYPES = {
+    'goblin': {'health': 30, 'damage': 5},
+    'troll': {'health': 50, 'damage': 10},
+}
 
-# Maximum values
-MAX_PLAYERS: Final[int] = 4  # Max number of players in a game
-MAX_LEVELS: Final[int] = 10  # Max number of game levels
+MAX_PLAYERS = 4
+
+FPS = 60  # frames per second
+
+def get_level_name(level_number):
+    return LEVELS.get(level_number, 'Unknown Level')
+
+# Function to get item details by name
+
+def get_item_details(item_name):
+    return ITEMS.get(item_name, None)
+
+# Function to check if a player state is valid
+
+def is_valid_player_state(state):
+    return state in PLAYER_STATES
+
