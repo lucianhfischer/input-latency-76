@@ -1,48 +1,33 @@
-from typing import List, Tuple
+import random
+import time
+
+def generate_random_number(min_value, max_value):
+    """Generates a random number between min_value and max_value."""
+    return random.randint(min_value, max_value)
 
 
-def calculate_average_ping(pings: List[int]) -> float:
-    """
-    Calculate the average ping from a list of pings.
-
-    Args:
-        pings (List[int]): A list of ping values in milliseconds.
-
-    Returns:
-        float: The average ping value rounded to two decimal places.
-    """    
-    if not pings:
-        raise ValueError('Ping list cannot be empty')
-    return round(sum(pings) / len(pings), 2)
+def simulate_input_latency(latency_ms):
+    """Simulates user input delay."""
+    time.sleep(latency_ms / 1000.0)
 
 
-def categorize_ping(ping: int) -> str:
-    """
-    Categorize the given ping value into latency categories.
-
-    Args:
-        ping (int): Ping value in milliseconds.
-
-    Returns:
-        str: A category of the ping ('Good', 'Average', 'Poor').
-    """    
-    if ping < 20:
-        return 'Good'
-    elif 20 <= ping < 50:
-        return 'Average'
+def adjust_latency_for_performance(fps):
+    """Adjusts latency based on frames per second (FPS)."""
+    if fps < 30:
+        return 150  # high latency
+    elif fps < 60:
+        return 100  # moderate latency
     else:
-        return 'Poor'
+        return 50   # low latency
 
 
-def is_ping_acceptable(ping: int, threshold: int = 100) -> bool:
-    """
-    Check if the ping is below the acceptable threshold.
+def create_latency_banner(latency):
+    """Creates a formatted banner displaying the current latency."""
+    return f"Current Input Latency: {latency}ms"
 
-    Args:
-        ping (int): Ping value in milliseconds.
-        threshold (int, optional): The accepted threshold for ping. Defaults to 100.
 
-    Returns:
-        bool: True if the ping is acceptable, False otherwise.
-    """    
-    return ping < threshold
+def calculate_average_latency(latencies):
+    """Calculates the average of a list of latencies."""
+    if not latencies:
+        return 0
+    return sum(latencies) / len(latencies)
