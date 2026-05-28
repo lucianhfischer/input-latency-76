@@ -1,36 +1,27 @@
 import time
-import numpy as np
 
-class GameCore:
+class Game:
     def __init__(self):
-        self.frame_data = []
-        self.latency_threshold = 0.05  # seconds
+        self.start_time = None
+        self.end_time = None
 
-    def add_frame(self, frame):
-        current_time = time.time()
-        if self.should_process_frame(current_time):
-            self.frame_data.append((current_time, frame))
-            self.process_frame(frame)
-        else:
-            print("Frame dropped due to high latency.")
+    def start_game(self):
+        self.start_time = time.time()
+        print("Game started!")
 
-    def should_process_frame(self, current_time):
-        if not self.frame_data:
-            return True
-        last_frame_time = self.frame_data[-1][0]
-        return (current_time - last_frame_time) < self.latency_threshold
+    def end_game(self):
+        self.end_time = time.time()
+        elapsed_time = self.calculate_elapsed_time()
+        print(f"Game ended! Duration: {elapsed_time} seconds")
 
-    def process_frame(self, frame):
-        # Simulate frame processing
-        processed_frame = np.array(frame) * 2  # Example processing operation
-        self.display_frame(processed_frame)
+    def calculate_elapsed_time(self):
+        if self.start_time is None:
+            return 0
+        return self.end_time - self.start_time if self.end_time else time.time() - self.start_time
 
-    def display_frame(self, frame):
-        print(f"Displaying frame: {frame}")
-
-# Example usage
+# Usage example:
 if __name__ == '__main__':
-    core = GameCore()
-    for i in range(10):
-        time.sleep(0.02)  # Simulating a frame render every 20 ms
-        core.add_frame(i)
+    game = Game()
+    game.start_game()
+    time.sleep(2)  # Simulate game play time
+    game.end_game()
