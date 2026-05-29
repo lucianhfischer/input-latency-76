@@ -1,47 +1,43 @@
-# input-latency-76
+# Input Latency 76
 
-input-latency-76 is a Python tool designed to measure and analyze input latency in gaming setups. By providing real-time feedback and detailed reports, developers and gamers can fine-tune their hardware and software for optimal performance.
+Input Latency 76 is a Python-based tool designed to measure and analyze input latency in gaming applications, providing developers with insights to enhance user experience. Optimize your games by identifying bottlenecks in input responsiveness across various platforms.
 
 ## Features
 
-- **Comprehensive Latency Measurement**: Accurately captures the time from user input to system reaction, allowing for precise calibration of gaming setups.
-- **Real-Time Visualization**: Provides a graphical representation of latency data, making it easy to identify spikes and trends during gameplay.
-- **Customizable Testing Scenarios**: Users can configure settings for different input devices (keyboard, mouse, gamepad) and test under various conditions.
-- **Exportable Reports**: Generate CSV reports of latency metrics for further analysis or comparison, aiding in troubleshooting and optimization.
+- **Real-Time Latency Measurement**: Capture input latency metrics with millisecond precision during gameplay, ensuring accurate assessments.
+- **Cross-Platform Compatibility**: Supports major gaming platforms including Windows, macOS, and Linux, allowing developers to analyze their games regardless of the environment.
+- **Visual Graphing Tools**: Generate detailed visualizations of latency data, enabling easy interpretation and reporting of input performance metrics.
+- **Customizable Reports**: Create tailored latency reports for different game scenarios, providing context-specific insights for optimization efforts.
 
 ## Installation
 
-To get started with input-latency-76, follow these straightforward installation steps:
+To get started with Input Latency 76, make sure you have Python 3.7 or higher installed. You can clone the repository and install the required dependencies using the following commands:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Developer/input-latency-76.git
-   cd input-latency-76
-   ```
-
-2. Set up a virtual environment (optional but recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate   # On Windows use `venv\Scripts\activate`
-   ```
-
-3. Install the required packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+git clone https://github.com/Developer/input-latency-76.git
+cd input-latency-76
+pip install -r requirements.txt
+```
 
 ## Basic Usage Example
 
-Once installed, you can run the tool as follows:
+Once installed, you can start measuring input latency by running the primary script. Here’s a simple example of how to use the tool:
 
 ```python
-from latency_tester import LatencyTester
+from input_latency import LatencyChecker
 
-tester = LatencyTester(input_device='mouse')
-results = tester.run_test(duration=30)  # Test for 30 seconds
-tester.display_results()
+checker = LatencyChecker()
+checker.start()  # Initializes latency monitoring
+# Perform input actions in your game for 10 seconds
+checker.measure(10)  
+results = checker.get_results()  # Retrieve latency measurements 
+print(results)
 ```
 
-This will begin a latency test for the specified input device and display the results, helping you understand performance metrics during gameplay.
+This example initializes the latency checker, measures input latency during gameplay, and prints the results for later analysis.
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
+
+---
+
+Explore Input Latency 76 to ensure your gaming applications deliver a seamless player experience, and start optimizing user interaction today!
