@@ -1,40 +1,37 @@
-import sys
-import json
+import time
+import logging
 
-# Define a simple custom exception for validation errors
-class ValidationError(Exception):
-    pass
+class GameEvent:
+    def __init__(self, event_type, data):
+        self.event_type = event_type
+        self.data = data
+        self.timestamp = time.time()
 
-# Function to validate user input
-def validate_input(user_input):
-    if not isinstance(user_input, dict):
-        raise ValidationError('Input must be a dictionary.')
-    required_keys = ['action', 'value']
-    for key in required_keys:
-        if key not in user_input:
-            raise ValidationError(f'Missing required key: {key}')
-    if not isinstance(user_input['value'], int):
-        raise ValidationError('Value must be an integer.')
-    return True
+    def __repr__(self):
+        return f'<GameEvent(type={self.event_type}, data={self.data})>'
 
-# Main processing loop
-def main_loop():
-    while True:
-        try:
-            # Simulated user input
-            user_input = json.loads(input('Enter input (JSON): '))
-            validate_input(user_input)  # Validate input
-            process_input(user_input)  # Process validated input
-        except ValidationError as ve:
-            print(f'Validation Error: {ve}')
-        except json.JSONDecodeError:
-            print('Invalid JSON format.')
-        except Exception as e:
-            print(f'An unexpected error occurred: {e}')
+class EventHandler:
+    def __init__(self):
+        self.events = []
+        self.logger = logging.getLogger(__name__)
 
-# Function to process validated input
-def process_input(user_input):
-    print(f'Processing action: {user_input['action']} with value: {user_input['value']}')
+    def add_event(self, event_type, data):
+        event = GameEvent(event_type, data)
+        self.events.append(event)
+        self.logger.info(f'Event added: {event}')
+
+    def process_events(self):
+        while self.events:
+            event = self.events.pop(0)
+            self.handle_event(event)
+
+    def handle_event(self, event):
+        # Placeholder for event handling logic
+        self.logger.debug(f'Handling event: {event}')
+        # Handle specific event types here
 
 if __name__ == '__main__':
-    main_loop()
+    logging.basicConfig(level=logging.INFO)
+    handler = EventHandler()
+    handler.add_event('player_joined', {'username': 'player1'})
+    handler.process_events()
