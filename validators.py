@@ -1,28 +1,24 @@
 import re
 
-class InputValidator:
-    @staticmethod
-    def is_valid_username(username):
-        """ Validate username: 3-20 characters, alphanumeric, underscores """
-        pattern = re.compile(r'^[a-zA-Z0-9_]{3,20}$')
-        return bool(pattern.match(username))
+# Regular expression for input validation
+VALID_INPUT_PATTERN = re.compile(r'^[a-zA-Z0-9_]+$')
 
-    @staticmethod
-    def is_valid_email(email):
-        """ Validate email format """
-        pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$')
-        return bool(pattern.match(email))
+def validate_input(user_input):
+    """
+    Validates the user's input to ensure it only contains 
+    alphanumeric characters and underscores.
+    """
+    if not isinstance(user_input, str):
+        raise ValueError('Input must be a string.')
+    if not VALID_INPUT_PATTERN.match(user_input):
+        raise ValueError('Input contains invalid characters.')
+    return True
 
-    @staticmethod
-    def is_valid_password(password):
-        """ Validate password: 8-32 characters, at least one upper, one lower, one digit """
-        pattern = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,32}$')
-        return bool(pattern.match(password))
-
-    @staticmethod
-    def validate_all(username, email, password):
-        return (
-            InputValidator.is_valid_username(username) and
-            InputValidator.is_valid_email(email) and
-            InputValidator.is_valid_password(password)
-        )
+# Example usage in main processing loop
+if __name__ == '__main__':
+    user_input = input('Enter your input: ')
+    try:
+        if validate_input(user_input):
+            print('Input is valid!')
+    except ValueError as e:
+        print(f'Error: {e}')
